@@ -1,0 +1,7 @@
+input[type="text"] { height:30px; font-size:20px; width:120px;}
+input[type="radio"] { margin:9px 10px; }
+.commonLayout { position:relative; display:table-row; float:left; }
+.tableTitle { padding:5px 0; display:inline-block; width:100%; text-align:center; font-weight:bold; font-size:14px; }
+select { height:30px; margin:0; }
+
+textarea { width:1024px; height:300px; }
