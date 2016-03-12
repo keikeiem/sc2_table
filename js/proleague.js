@@ -7,8 +7,11 @@ var maps = [
     { name: '프리온 단구', value: 5 },
     { name: '울레나', value: 6 }
 ];
-
-
+/** 라디오 버튼 클릭시
+* @method radioClick
+* @param {string} name : 라디오 버튼 이름
+* @param {string} value : 승리팀 (1 or 2)
+*/
 var radioClick = function(name, value) {
     if (name === 'match1') { array[0] = Number(value); }
     if (name === 'match2') { array[1] = Number(value); }
@@ -17,11 +20,18 @@ var radioClick = function(name, value) {
     if (name === 'match5') { array[4] = Number(value); }
     console.log(array);
 };
-
+/** 라디오 버튼 데이터로 스코어 출력하는 함수
+* @method checkArray
+*/
 var checkArray = function() {
     console.log(array);
 };
-
+/** Player Select Box를 생성하는 함수
+* @method makePlayerBox
+* @param {object} team : 선택된 팀 객체
+* @param {string} teamOrder : 팀 순서 (1 or 2)
+* @param {string} matchOrder : 세트 순서
+*/
 var makePlayerBox = function(team, teamOrder, matchOrder) {
     var string = '';
     string += '<select id="team' + teamOrder + 'match' + matchOrder + '" style="width:160px;">';
@@ -33,7 +43,11 @@ var makePlayerBox = function(team, teamOrder, matchOrder) {
 
     document.getElementById('team' + teamOrder + 'player' + matchOrder).innerHTML = string;
 };
-
+/** Map Select Box를 생성하는 함수
+* @method makeMapBox
+* @param {object} mapData : 맵 객체
+* @param {string} matchOrder : 세트 순서
+*/
 var makeMapBox = function(mapData, matchOrder) {
     var string = '';
     string += '<select id="map' + matchOrder + '" style="width:160px; padding-left:30px;">';
@@ -45,13 +59,11 @@ var makeMapBox = function(mapData, matchOrder) {
 
     document.getElementById('map' + matchOrder).innerHTML = string;
 };
-
-window.onload = function() {
-    for (var i = 0; i < 5; i++) {
-        makeMapBox(maps, i + 1);
-    }
-}
-
+/** 팀 선택시 이벤트
+* @method makeMapBox
+* @param {string} teamOrder : 팀 순서 (1 or 2)
+* @param {string} teanNumber : 팀 번호 (value)
+*/
 var selectTeam = function(teamOrder, teamNumber) {
     var team;
     teamNumber = Number(teamNumber);
@@ -68,3 +80,10 @@ var selectTeam = function(teamOrder, teamNumber) {
         makePlayerBox(team, teamOrder, i + 1);
     }
 };
+
+// 페이지 열리면 작동하는 함수
+window.onload = function() {
+    for (var i = 0; i < 5; i++) {
+        makeMapBox(maps, i + 1);
+    }
+}
