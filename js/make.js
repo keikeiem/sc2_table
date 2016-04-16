@@ -5,8 +5,8 @@ var selectSet = function() {
     var string = '';
 
     for (var setNumber = 0; setNumber < setElement; setNumber++) {
-        string += '<div class="commonLayout" style="width:300px;">';
-        string += '<div class="commonLayout" style="width:50px; height:30px; border:1px solid #DDD;">';
+        string += '<div class="commonLayout" style="width:100%;">';
+        string += '<div class="commonLayout" style="width:172px; height:30px; border:1px solid #DDD;">';
         string += '<span class="tableTitle">'+ (setNumber + 1) +'세트</span></div>';
         string += '<div class="commonLayout" style="height:30px; border:1px solid #DDD;">';
         string += '<select id="p1_r'+ (setNumber + 1) +'">';
@@ -147,6 +147,104 @@ var makeHTML = function() {
     resultElement.value = string;
     // document.getElementById('test').innerHTML = string;
 };
+
+var makeHTMLProleague = function() {
+    var terranIconSrc = 'http://intotheclan.com/xe/files/attach/images/140/373/041/b256c9a64d458e1f042cc26880e1fcd5.png';
+    var zergIconSrc = 'http://intotheclan.com/xe/files/attach/images/140/373/041/e78ff49d2133d443a4e1f91943c223c5.png';
+    var protossIconSrc = 'http://intotheclan.com/xe/files/attach/images/140/373/041/15895471f9eff259d228252d164f0bc8.png';
+    var terranBackColor = '#E0E0FF';
+    var zergBackColor = '#FFE0E0';
+    var protossBackColor = '#E0FFE0';
+
+    function getRaceIcon(raceString) {
+        if (raceString === 'P') {
+            return [protossIconSrc, protossBackColor];
+        } else if (raceString === 'T') {
+            return [terranIconSrc, terranBackColor];
+        } else if (raceString === 'Z') {
+            return [zergIconSrc, zergBackColor];
+        } else {
+            return ['', '#FAFAFA'];
+        }
+    }
+
+    var scoreResult = computeScore(scoreArray);
+    var roundNumber = Number(document.getElementById('proleagueMatchType').value) === 1 ? 5 : 7;
+    function getMapName(value) {
+        if (value === 1) { return '어스름 탑'; }
+        if (value === 2) { return '레릴락 마루'; }
+        // if (value === 3) { return '세라스 폐허'; }
+        if (value === 3) { return '궤도 조선소'; }
+        // if (value === 4) { return '궤도 조선소'; }
+        if (value === 4) { return '프로스트'; }
+        if (value === 5) { return '세종과학기지'; }
+        if (value === 6) { return '만발의 정원'; }
+        if (value === 7) { return '울레나'; }
+        if (value === 8) { return '라크쉬르'; }
+        if (value === 9) { return '하늘방패'; }
+    }
+    function getTeamName(value) {
+        if (value === 1) { return 'SK Telecom T1'; }
+        if (value === 2) { return 'KT Rolster'; }
+        if (value === 3) { return 'Samsung Galaxy'; }
+        if (value === 4) { return 'CJ Entus'; }
+        if (value === 5) { return 'JinAir Greenwings'; }
+        if (value === 6) { return 'MVP Chicckenmaru'; }
+        if (value === 7) { return 'Afreeca Freecs'; }
+    }
+    function getTeamArray(teamNumber) {
+        if (teamNumber === 1) { return skT1; }
+        if (teamNumber === 2) { return ktRolster; }
+        if (teamNumber === 3) { return samsungGalaxy; }
+        if (teamNumber === 4) { return cjEntus; }
+        if (teamNumber === 5) { return jinAir; }
+        if (teamNumber === 6) { return mvp; }
+        if (teamNumber === 7) { return afreeca; }
+    }
+    var team1 = Number(document.getElementById('proleagueTeam1').value);
+    var team2 = Number(document.getElementById('proleagueTeam2').value);
+    var team1Name = getTeamName(team1);
+    var team2Name = getTeamName(team2);
+    var team1Roster = getTeamArray(team1);
+    var team2Roster = getTeamArray(team2);
+    var string = '';
+    string += '<table style="border:1px solid #AAA;">';
+    string += '<tr style="background-color:#FFFBF1;">';
+    string += '<th></th>';
+    string += '<td colspan="2" style="text-align:center; ' + ( scoreResult[0] > scoreResult[1] ? 'font-weight:bold; ' : '' ) + '">' + team1Name + '</td>';
+    string += '<th>' + scoreResult[0] + ':' + scoreResult[1] + '</th>';
+    string += '<td colspan="2" style="text-align:center; ' + ( scoreResult[0] < scoreResult[1] ? 'font-weight:bold; ' : '' ) + '">' + team2Name + '</td>';
+    string += '<tr>';
+    for (var i = 0; i < roundNumber; i++) {
+        var map = getMapName(Number(document.getElementById('match' + (i + 1) + 'map').value));
+        var team1RosterNumber = document.getElementById('team1match' + (i + 1)).value;
+        var team2RosterNumber = document.getElementById('team2match' + (i + 1)).value;
+        if (team1RosterNumber === 'A') {
+            var player1 = {name: '', race: '?', id: ''}
+        } else {
+            var player1 = team1Roster[Number(team1RosterNumber)];
+        }
+        if (team2RosterNumber === 'A') {
+            var player2 = {name: '', race: '?', id: ''}
+        } else {
+            var player2 = team1Roster[Number(team2RosterNumber)];
+        }
+        string += '<tr>';
+        string += '<td style="background-color:#DDD;">' + (i + 1) + '세트</td>';
+        string += '<td width="150" style="text-align:center; background-color:' + getRaceIcon(player1.race)[1] + ';' + ( scoreArray[i] === 1 ? 'font-weight:bold;' : '' ) + '">' + player1.id + '(' + player1.name + ')' + '</td>';
+        string += '<td><img src="' + getRaceIcon(player1.race)[0] + '"</img></td>';
+        string += '<td style="text-align:center;">' + map + '</td>';
+        string += '<td><img src="' + getRaceIcon(player2.race)[0] + '"</img></td>';
+        string += '<td width="150" style="text-align:center; background-color:' + getRaceIcon(player2.race)[1] + ';' + ( scoreArray[i] === 2 ? 'font-weight:bold;' : '' ) + '">' + player2.id + '(' + player2.name + ')' + '</td>';
+        string += '</tr>';
+    }
+    string += '</table>';
+
+    document.getElementById('test').innerHTML = string;
+    document.getElementById('testArea').value = string;
+};
+
+
 
 var showSource = function() {
     var sourceElement = document.getElementById('resultArea');
